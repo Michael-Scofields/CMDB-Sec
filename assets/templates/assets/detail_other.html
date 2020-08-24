@@ -1,0 +1,425 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}资产详情{% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        资产详情
+        <small>asset info</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li>资产总表</li>
+        <li class="active">资产详情</li>
+      </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+
+     <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="box">
+
+        <div class="box-header with-border">
+            <h3 class="box-title"><strong class="btn btn-block btn-primary btn-lg">【{{ asset.name }}】</strong></h3>
+
+            <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+              <i class="fa fa-minus"></i></button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+              <i class="fa fa-times"></i></button>
+            </div>
+        </div>
+
+        <div class="box-body">
+
+            <h4><b>概览:</b></h4>
+            <table border="1" class="table  table-responsive" style="border-left:3px solid deepskyblue;border-bottom:1px solid deepskyblue" >
+                <thead>
+                    <tr>
+
+                        <th>SN</th>
+                        <th>类型</th>
+                        <th>总负责人</th>
+                        <th>联系电话</th>
+                        <th>联系邮箱</th>
+                        <th>状态</th>
+                        <th>标签</th>
+                        <th>重要程度</th>
+                        <th>添加方式</th>
+                        <th>更新日期</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ asset.sn }}</td>    {# SN #}
+                    <td>{{ asset.get_asset_type_display }}</td>    {# 资产类型 #}
+                    <td>{{ asset.department_per|default:'N/A' }}</td>    {# 负责人 #}
+
+                    <td>{{ asset.phone|default:"-" }}</td>    {# 联系电话 #}
+
+                    <td>{{ asset.mail|default:"-" }}</td>    {# 联系邮箱 #}
+
+                    {% if asset.status == 0 %}    {# 状态 #}
+                          <td><label class="label label-success">{{ asset.get_status_display }}</label></td>
+                        {% elif asset.status == 1 %}
+                          <td><label class="label label-warning">{{ asset.get_status_display }}</label></td>
+                        {% elif asset.status == 2 %}
+                          <td><label class="label label-default">{{ asset.get_status_display }}</label></td>
+                        {% elif asset.status == 3 %}
+                          <td><label class="label label-danger">{{ asset.get_status_display }}</label></td>
+                        {% elif asset.status == 4 %}
+                          <td><label class="label label-info">{{ asset.get_status_display }}</label></td>
+                        {% endif %}
+
+                        <td>    {# 标签 #}
+                          {% for tag in asset.tags.all %}
+                            <label class="label label-primary">{{ tag.name }}</label>
+                            {% empty %}
+                              -
+                            {% endfor %}
+                        </td>
+
+                        <td>{{ asset.get_le_status_display }}</td>    {# 重要程度 #}
+
+                        <td>{{ asset.server.get_created_by_display }}</td>    {# 添加方式 #}
+
+                        <td>{{ asset.m_time|date:"Y/m/d [H:m:s]" }}</td>    {# 更新日期 #}
+                </tr>
+                </tbody>
+            </table>
+{#            <br />#}
+{#            <table border="1" class="table  table-responsive" style="border-left:3px solid deepskyblue;border-bottom:1px solid deepskyblue">#}
+{#                <thead>#}
+{#                    <tr>#}
+{#                        <th>合同</th>#}
+{#                        <th>价格</th>#}
+{#                        <th>购买日期</th>#}
+{#                        <th>过保日期</th>#}
+{#                        <th>管理员</th>#}
+{#                        <th>批准人</th>#}
+{#                        <th>备注</th>#}
+{#                        <th>批准日期</th>#}
+{#                    </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                <tr>#}
+{#                    <td>{{ asset.contract.name|default:'N/A' }}</td>#}
+{#                    <td>{{ asset.price|default:'N/A' }}</td>#}
+{#                    <td>{{ asset.purchase_day|default:'N/A' }}</td>#}
+{#                    <td>{{ asset.expire_day|default:'N/A' }}</td>#}
+{#                    <td>{{ asset.admin|default:'N/A' }}</td>#}
+{#                    <td>{{ asset.approved_by|default:'N/A' }}</td>#}
+{#                    <td>{{ asset.memo|default:'N/A' }}</td>#}
+{#                    <td>{{ asset.m_time }}</td>#}
+{#                </tr>#}
+{#                </tbody>#}
+{#            </table>#}
+            <h4><b>地址信息:</b></h4>
+            <table border="1" class="table  table-responsive" style="border-left:3px solid orangered;border-bottom:1px solid orangered">
+                <thead>
+                    <tr>
+                        <th>管理地址</th>
+                        <th>内网地址</th>
+                        <th>公网地址</th>
+
+                        <th>域名/URL</th>
+                        <th>域名状态</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ asset.manage_ip|default:"-" }}</td>    {# 管理IP #}
+
+                    <td>{{ asset.in_ip|default:"-" }}</td>    {# 内网IP #}
+
+                    <td>{{ asset.out_ip|default:"-" }}</td>    {# 公网IP #}
+
+
+
+
+
+                    <td>{{ asset.visit_url|default:"-" }}</td>    {# 域名/URL #}
+
+                    <td>{{ asset.url_status|default:"-" }}</td>    {# 域名状态 #}
+
+
+                </tr>
+                </tbody>
+            </table>
+
+            <h4><b>系统信息:</b></h4>
+            <table border="1" class="table  table-responsive" style="border-left:3px solid purple;border-bottom:1px solid purple">
+                <thead>
+                    <tr>
+
+                        <th>机房</th>
+
+                        <th>机柜</th>
+                        <th>编号</th>
+                        <th>区域</th>
+                        <th>部署方式</th>
+                        <th>设备型号</th>
+                        <th>软件版本</th>
+{#                        <th>系统负责人</th>#}
+{#                        <th>联系电话</th>#}
+{#                        <th>联系邮箱</th>#}
+
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+
+                    <td>{{ asset.idc|default:"-" }}</td>    {# 机房 #}
+                    <td>{{ asset.idc.name_2|default:"-" }}</td>    {# 机柜 #}
+                    <td>{{ asset.idc.name_3|default:"-" }}</td>    {# 编号 #}
+                    <td>{{ asset.regional|default:"-" }}</td>    {# 区域 #}
+                    <td>{{ asset.deployment|default:"-" }}</td>    {# 部署位置 #}
+                    <td>{{ asset.otherdevice.oth_model|default:"-" }}</td>    {# 设备型号 #}
+                    <td>{{ asset.otherdevice.oth_version|default:"-" }}</td>    {# 软件版本 #}
+{#                    <td>{{ asset.server.department_per|default:'N/A' }}</td>#}
+{#                    <td>{{ asset.server.phone|default:'N/A' }}</td>#}
+{#                    <td>{{ asset.server.mail|default:'-' }}</td>#}
+
+                </tr>
+                </tbody>
+            </table>
+            <h4><b>运维信息:</b></h4>
+            <table border="1" class="table  table-responsive" style="border-left:3px solid brown;border-bottom:1px solid brown">
+                <thead>
+                    <tr>
+                        <th>运维部门</th>
+                        <th>运维负责人</th>
+                        <th>联系电话</th>
+                        <th>联系邮箱</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+
+                    <td>{{ asset.otherdevice.oth_department|default:'-' }}</td>
+                    <td>{{ asset.otherdevice.oth_department_per|default:'-' }}</td>
+                    <td>{{ asset.otherdevice.oth_phone|default:'-' }}</td>
+                    <td>{{ asset.otherdevice.oth_mail|default:'-' }}</td>
+
+                </tr>
+                </tbody>
+            </table>
+            <h4><b>服务信息:</b></h4>
+            <table border="1" class="table  table-responsive" style="border-left:3px solid green;border-bottom:1px solid green">
+                <thead>
+                    <tr>
+                        <th>服务商</th>
+                        <th>服务负责人</th>
+                        <th>联系电话</th>
+                        <th>联系邮箱</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+
+                    <td>{{ asset.manufacturer.man_name|default:'-' }}</td>
+                    <td>{{ asset.manufacturer.man_department_per|default:'-' }}</td>
+                    <td>{{ asset.manufacturer.man_phone|default:'-' }}</td>
+                    <td>{{ asset.manufacturer.man_mail|default:'-' }}</td>
+
+                </tr>
+                </tbody>
+            </table>
+{#            <h4><b>中间件信息:</b></h4>#}
+{#            <table border="1" class="table  table-responsive" style="border-left:3px solid green;border-bottom:1px solid green">#}
+{#                <thead>#}
+{#                    <tr>#}
+{#                        <th>中间件类型</th>#}
+{#                        <th>中间件版本</th>#}
+{#                        <th>中间件负责人</th>#}
+{#                        <th>联系电话</th>#}
+{#                        <th>联系邮箱</th>#}
+{##}
+{#                    </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                <tr>#}
+{##}
+{#                    <td>{{ asset.middleware.mid_model|default:'-' }}</td>#}
+{#                    <td>{{ asset.middleware.mid_version|default:'-' }}</td>#}
+{#                    <td>{{ asset.middleware.department_per|default:'-' }}</td>#}
+{#                    <td>{{ asset.middleware.phone|default:'-' }}</td>#}
+{#                    <td>{{ asset.middleware.mail|default:'-' }}</td>#}
+{##}
+{#                </tr>#}
+{#                </tbody>#}
+{#            </table>#}
+{#            <h4><b>服务商信息:</b></h4>#}
+{#            <table border="1" class="table  table-responsive" style="border-left:3px solid green;border-bottom:1px solid green">#}
+{#                <thead>#}
+{#                    <tr>#}
+{#                        <th>服务商名称</th>#}
+{#                        <th>开发框架</th>#}
+{#                        <th>开发语言</th>#}
+{#                        <th>版本信息</th>#}
+{#                        <th>服务商负责人</th>#}
+{#                        <th>联系电话</th>#}
+{#                        <th>服务邮箱</th>#}
+{##}
+{#                    </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                <tr>#}
+{##}
+{#                    <td>{{ asset.manufacturer.name|default:'-' }}</td>#}
+{#                    <td>{{ asset.manufacturer.frame|default:'-' }}</td>#}
+{#                    <td>{{ asset.manufacturer.language|default:'-' }}</td>#}
+{#                    <td>{{ asset.manufacturer.version|default:'-' }}</td>#}
+{#                    <td>{{ asset.manufacturer.department_per|default:'-' }}</td>#}
+{#                    <td>{{ asset.manufacturer.phone|default:'-' }}</td>#}
+{#                    <td>{{ asset.manufacturer.mail|default:'-' }}</td>#}
+{##}
+{#                </tr>#}
+{#                </tbody>#}
+{#            </table>#}
+{#            <h4><b>CPU:</b></h4>#}
+{#            <table border="1" class="table  table-responsive" style="border-left:3px solid purple;border-bottom:1px solid purple">#}
+{#                <thead>#}
+{#                    <tr>#}
+{#                        <th  style="width: 45%">CPU型号</th>#}
+{#                        <th  style="width: 15%">物理CPU个数</th>#}
+{#                        <th>CPU核数</th>#}
+{#                    </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                <tr>#}
+{#                    <td>{{ asset.cpu.cpu_model|default:'N/A' }}</td>#}
+{#                    <td>{{ asset.cpu.cpu_count|default:'1' }}</td>#}
+{#                    <td>{{ asset.cpu.cpu_core_count|default:'1' }}</td>#}
+{#                </tr>#}
+{#                </tbody>#}
+{#            </table>#}
+{##}
+{#            <h4><b>内存:</b></h4>#}
+{#            <table border="1" class="table  table-responsive" style="border-left:3px solid orangered;border-bottom:1px solid orangered">#}
+{#                <thead>#}
+{#                    <tr>#}
+{#                        <th style="width:5%;">序号</th>#}
+{#                        <th>型号</th>#}
+{#                        <th>容量</th>#}
+{#                        <th>插槽</th>#}
+{#                        <th>制造商</th>#}
+{#                        <th>SN</th>#}
+{#                    </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                {% for ram in asset.ram_set.all %}#}
+{#                    <tr>#}
+{#                        <td>{{ forloop.counter }}</td>#}
+{#                        <td>{{ ram.model|default:'N/A' }}</td>#}
+{#                        <td>{{ ram.capacity|default:'N/A' }}</td>#}
+{#                        <td>{{ ram.slot }}</td>#}
+{#                        <td>{{ ram.manufacturer|default:'N/A' }}</td>#}
+{#                        <td>{{ ram.sn|default:'N/A' }}</td>#}
+{#                    </tr>#}
+{#                {% empty %}#}
+{#                    <tr>#}
+{#                        <td></td><td></td><td></td><td></td><td></td><td></td>#}
+{#                    </tr>#}
+{#                {% endfor %}#}
+{#                </tbody>#}
+{#            </table>#}
+{##}
+{#            <h4><b>硬盘:</b></h4>#}
+{#            <table border="1" class="table  table-responsive" style="border-left:3px solid brown;border-bottom:1px solid brown">#}
+{#                <thead>#}
+{#                    <tr>#}
+{#                        <th style="width:5%;">序号</th>#}
+{#                        <th>型号</th>#}
+{#                        <th>容量</th>#}
+{#                        <th>插槽</th>#}
+{#                        <th>接口类型</th>#}
+{#                        <th>制造商</th>#}
+{#                        <th>SN</th>#}
+{#                    </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                {% for disk in asset.disk_set.all %}#}
+{#                    <tr>#}
+{#                        <td>{{ forloop.counter }}</td>#}
+{#                        <td>{{ disk.model|default:'N/A' }}</td>#}
+{#                        <td>{{ disk.capacity|default:'N/A' }}</td>#}
+{#                        <td>{{ disk.slot|default:'N/A'  }}</td>#}
+{#                        <td>{{ disk.get_interface_type_display }}</td>#}
+{#                        <td>{{ disk.manufacturer|default:'N/A' }}</td>#}
+{#                        <td>{{ disk.sn}}</td>#}
+{#                    </tr>#}
+{#                {% empty %}#}
+{#                    <tr>#}
+{#                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>#}
+{#                    </tr>#}
+{#                {% endfor %}#}
+{#                </tbody>#}
+{#            </table>#}
+{##}
+{#            <h4><b>网卡:</b></h4>#}
+{#            <table border="1" class="table  table-responsive" style="border-left:3px solid #a59b1a;border-bottom:1px solid #a59b1a">#}
+{#                <thead>#}
+{#                    <tr>#}
+{#                        <th style="width:5%;">序号</th>#}
+{#                        <th>名称</th>#}
+{#                        <th>型号</th>#}
+{#                        <th>MAC</th>#}
+{#                        <th>IP</th>#}
+{#                        <th>掩码</th>#}
+{#                        <th>绑定地址</th>#}
+{#                    </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                {% for nic in asset.nic_set.all %}#}
+{#                    <tr>#}
+{#                        <td>{{ forloop.counter }}</td>#}
+{#                        <td>{{ nic.name|default:'N/A' }}</td>#}
+{#                        <td>{{ nic.model }}</td>#}
+{#                        <td>{{ nic.mac  }}</td>#}
+{#                        <td>{{ nic.ip_address|default:'N/A' }}</td>#}
+{#                        <td>{{ nic.net_mask|default:'N/A' }}</td>#}
+{#                        <td>{{ nic.bonding|default:'N/A' }}</td>#}
+{#                    </tr>#}
+{#                {% empty %}#}
+{#                    <tr>#}
+{#                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>#}
+{#                    </tr>#}
+{#                {% endfor %}#}
+{#                </tbody>#}
+{#            </table>#}
+
+        </div>
+        <!-- /.box-body -->
+
+
+
+        <div class="box-footer">
+          <i class="fa fa-angle-double-left"></i>&nbsp;&nbsp;<a href="{% url 'assets:index' %}"><strong>返回资产列表页</strong></a>
+        </div>
+        <!-- /.box-footer-->
+      </div>
+      <!-- /.box -->
+
+    </section>
+    <!-- /.content -->
+
+
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

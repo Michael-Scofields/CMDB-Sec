@@ -1,0 +1,54 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- 上述meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'login/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'login/css/login.css' %}" rel="stylesheet">
+    <title>资产管理平台</title>
+  </head>
+  <body>
+    <div class="container">
+            <div class="col">
+              <form class="form-login" action="/login/" method="post">
+                  {% csrf_token %}
+                  {% if login_form.captcha.errors %}
+                    <div class="alert alert-warning">{{ login_form.captcha.errors }}</div>
+                  {% elif message2 %}
+                    <div class="alert alert-warning">{{ message2 }}</div>
+                  {% elif message %}
+                    <div class="alert alert-warning">{{ message }}</div>
+                  {% endif %}
+                  <h3 class="text-center">资产管理平台</h3>
+
+                  {{ login_form }}
+
+{#                  <div class="form-group">#}
+{#                      {{ login_form.username.label_tag }}#}
+{#                      {{ login_form.username}}#}
+{#                  </div>#}
+{#                  <div class="form-group">#}
+{#                      {{ login_form.password.label_tag }}#}
+{#                      {{ login_form.password }}#}
+{#                  </div>#}
+                  <div>
+                      <a href="/register/" class="text-success "><ins>新用户注册</ins></a>
+                      <button type="submit" class="btn btn-primary float-right">登录</button>
+                  </div>
+              </form>
+            </div>
+    </div> <!-- /container -->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    {#    以下三者的引用顺序是固定的#}
+    <script src="{% static 'login/js/jquery.js' %}"></script>
+    <script src="{% static 'login/js/popper.js' %}"></script>
+    <script src="{% static 'login/js/bootstrap.min.js' %}"></script>
+
+  </body>
+</html>
